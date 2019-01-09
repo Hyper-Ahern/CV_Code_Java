@@ -37,4 +37,7 @@ Then create a Racer demo class. You will read in the attributes of the two racer
 and number to move for racer object 1, followed by a direction number to move racer object 2 while keeping track of each racer. Direction 
 will always be entered in as 0 (backwards) or 1 (forward) no matter what type of character each Racer is. Move will always between 1 and 4 
 regardless of the character type of the Racer. You should handle all input limitations in the Racer Class.
-After each racer moves, check to see if there is a winner and add the moves (direction and read in steps) to a String that will be printed out after a winner/tie is declared. Continue to read in numbers representing direction/move for each racer until a winner is declared. Then print out the String with the pairs of direction/moves for each racer and who won (or tied) and in (n) number of turns. See the output. Please note, that after the input/output table, there are two images that goes with the first and second input/output examples, so you can see visually how the two racers move along a straight line. This is just to show you visually what happens after each move; however, for this assignment, you only need to supply the final String of moves and the winner to avoid problems of output that can happen in Codio.
+
+After each racer moves, check to see if there is a winner and add the moves (direction and read in steps) to a String that will be 
+printed out after a winner/tie is declared. Continue to read in numbers representing direction/move for each racer until a winner is 
+declared. Then print out the String with the pairs of direction/moves for each racer and who won (or tied) and in (n) number of turns.
