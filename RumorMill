@@ -1,0 +1,183 @@
+/**
+ * @author James Ahern - B00437921
+ * @description This program tracks rumors. It can print out everyone involved, people
+ * who told a rumor, people who heard one and either did or didnt tell
+ * anyone else, and it can also track the spread of the rumor.
+ */
+
+import java.util.*;
+
+public class RumourMill
+{ 
+  public static void main(String[] args)
+  {
+    // Declaring and intilaizing variables and scanner
+    Scanner in = new Scanner(System.in);
+    LinkedList list = new LinkedList();
+    String tempTeller = "";
+    String tempListener = "";
+    
+    // populating the linked list from scanner data then printing it
+    while(in.hasNext() && !tempListener.equals("*") && !tempTeller.equals("*"))
+    {
+      tempTeller = in.next();
+      
+      // Stop populating when a "*" is found
+      if(!tempListener.equals("*") && !tempTeller.equals("*"))
+      {
+        tempListener = in.next();
+        list.addToEnd(tempTeller, tempListener);
+      }
+    }
+    list.enumerate();
+    
+    // Tracking and printing people who told rumors
+    ArrayList <String> tellersArray = new ArrayList <String>();
+    tellersArray = tellers(list);
+    System.out.println(tellersArray);
+    
+    // Tracking and printing people who listened to rumors
+    ArrayList <String> listenersArray = new ArrayList <String>();
+    listenersArray = listeners(list);
+    System.out.println(listenersArray);
+    
+    // Tracking and printing people who heard a rumor but didn't repeat it
+    ArrayList <String> heardOfArray = new ArrayList <String>();
+    heardOfArray = heardOf(list);
+    System.out.println(heardOfArray);
+    
+    // Tracking and printing the spread of a rumor based on a given name
+    ArrayList <String> traceArray = new ArrayList <String>();
+    String name = in.next();
+    traceArray = trace(list, name);
+    System.out.println(traceArray); 
+  }
+  
+  /* STATIC METHOD tellers
+   * This method does the following:
+   * 1. creates an arraylist of everyone who told a rumor
+   * 
+   * @param LinkedList
+   * return ArrayList
+   */
+  public static ArrayList tellers (LinkedList list1)
+  {
+    ArrayList <String> tellersList = new ArrayList <String>();
+    for(int i = 0; i < list1.size(); i++)
+    {
+      Node curr = list1.getNode(i);
+      String temp = curr.getTeller();
+      
+      if(!tellersList.contains(temp))
+      {
+        tellersList.add(temp);
+      }
+      else
+      {
+        
+      }
+    }
+    return tellersList;
+  }
+  
+  /* STATIC METHOD listeners
+   * This method does the following:
+   * 1. creates an arraylist of everyone who heard a rumor
+   * 
+   * @param LinkedList
+   * return ArrayList
+   */
+  public static ArrayList listeners (LinkedList list2)
+  {
+    ArrayList <String> listenerList = new ArrayList <String>();
+    for(int i = 0; i < list2.size(); i++)
+    {
+      Node curr = list2.getNode(i);
+      String temp = curr.getListener();
+      if(!listenerList.contains(temp))
+      {
+        listenerList.add(temp);
+      }
+      else
+      {
+        
+      }
+    }
+    return listenerList;
+  }
+
+  /* STATIC METHOD heardOf
+   * This method does the following:
+   * 1. creates an arraylist of everyone who heard a rumor but did not
+   * tell one
+   * 
+   * @param LinkedList
+   * return ArrayList
+   */
+  public static ArrayList heardOf(LinkedList list3)
+  {
+    // Declaring and initializing variables and structures
+    ArrayList <String> heardOf = new ArrayList <String>();
+    ArrayList <String> tellersList2 = new ArrayList <String>();
+    ArrayList <String> listenerList2 = new ArrayList <String>();
+    
+    // Obtaining the arraylists of the tellers and listeners
+    tellersList2 = tellers(list3);
+    listenerList2 = listeners(list3);
+    
+    // Populating a third array of people who heard a rumor but didn't tell
+    for(int i = 0; i< listenerList2.size(); i++)
+    {
+      if(!tellersList2.contains(listenerList2.get(i)))
+      {
+        heardOf.add(listenerList2.get(i));
+      } 
+    }
+    return heardOf;   
+  }
+ 
+  /* STATIC METHOD trace
+   * This method does the following:
+   * 1. creates an arraylist with the spread of a single rumor.
+   * 2. Assumes that only one person told a single rumor 
+   * 
+   * @param LinkedList
+   * @param String (name of the person who started the rumor)
+   * return ArrayList
+   */
+  public static ArrayList trace(LinkedList list4, String name)
+  {
+    // Declaring and Initializing variables and structures
+    ArrayList <String> traceArr = new ArrayList <String>();
+    String nameToTrace = name;
+    String tempTell = "";
+    boolean firstTime = true;
+    Node curr = list4.getFrontNode();
+    
+    // Tracing the rumor with the start being the string "name"
+    while (curr!=null) 
+    {
+      // the first time, add the teller and the listener
+      if(curr.getTeller().equals(nameToTrace) && firstTime == true)
+      {
+        traceArr.add(curr.getTeller());
+        traceArr.add(curr.getListener());
+        nameToTrace = curr.getListener();
+        firstTime = false;
+      }
+      
+      // All subsequent times, add only the listener
+      else if(curr.getTeller().equals(nameToTrace) && firstTime == false)
+      {
+        traceArr.add(curr.getListener());
+        nameToTrace = curr.getListener();
+      }
+      else
+      {
+        
+      }    
+      curr= curr.getNext( );
+    }
+    return traceArr; 
+  } 
+}
