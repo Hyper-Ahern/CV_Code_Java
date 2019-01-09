@@ -1,0 +1,60 @@
+/**
+ * @author James Ahern - B00437921
+ * @description This is the Node class we created in class and have used throughout. I
+ * took this class from the lecture slides we had in class and the previous
+ * problems of the day. It creates Nodes which are used to make linkedlists.
+ */
+
+public class Node
+{
+  //Declaring and Initializing variables
+  private String teller;
+  private String listener;
+  private Node next;
+  
+  // Constructor
+  public Node (String t, String l, Node n) 
+  {
+    teller = t;
+    listener = l;
+    next = n;
+  }
+  
+  //Set Methods
+  public void setTeller(String t) 
+  { 
+    teller = t; 
+  }
+  
+  public void setListener(String l) 
+  { 
+    listener = l; 
+  }
+  
+  public void setNext(Node n) 
+  { 
+    next=n;
+  }
+  
+  // Get Methods
+  public String getTeller() 
+  { 
+    return teller; 
+  }
+    
+  public String getListener() 
+  { 
+    return listener; 
+  }
+  
+  public Node getNext() 
+  { 
+    return next; 
+  }
+  
+  // toString Method
+  public String toString() 
+  { 
+    return teller + " " + listener + " -->";
+  }
+}
