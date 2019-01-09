@@ -1,0 +1,8 @@
+Use the given UML and description of methods to define the Triangle2D program
+Then create a Triangle2DDemo class to create and use Triangle2D objects. The demo class contains the main method. 
+Use a Scanner object to read the attributes for six Point objects then create two Triangle2D objects (three points each) from a Scanner object.
+Print the attributes of both Triangle objects (using the toString method).
+Read in two more integers and create one more Point object and then have both Triangle2D objects call their contains method with the Point object
+See if the first triangle contains the second triangle (first triangle calls the method with the second triangle as the parameter).
+See if the second triangle contains the first triangle
+See if the two triangles overlap each other
