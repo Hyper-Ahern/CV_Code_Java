@@ -1,5 +1,5 @@
 /**
- * @author James A'Hern - B00437921
+ * @author James Ahern - B00437921
  * @description This Program creates triangle objects and checks to see if they contain given points,
  * contain other given triangles, or overlap one another based on certain criteria.
  */
