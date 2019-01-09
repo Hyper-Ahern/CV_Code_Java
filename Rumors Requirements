@@ -1,0 +1,20 @@
+Rumours are stories that people tell that usually start out as being partially true but as they get told by different people often they 
+often become completely untrue. You are going to track people who tell/spread rumours using LinkedLists.
+
+You will need to adapt the Node class that we built in class to hold two Strings as the data. The first String is called teller, and 
+this holds the name of the person who tells the rumour. The second String is called listener, and this holds the name of the person who 
+hears the rumour. Note, that after a person hears a rumour, they may tell another person the rumour (i.e., become a ‘teller’).
+
+Call the tellers method and print the returned ArrayList
+Call the listeners method and print the returned ArrayList
+Call the heardNoSpread method and print the returned ArrayList
+Read in one more names with the Scanner object, call the trace method and print the returned ArrayList
+The static methods are described below.
+The method tellers takes in a LinkedList and returns an ArrayList that holds all the names of those people who told (‘tellers’) a rumour with no repeated names.
+The method listeners takes in a LinkedList and returns an ArrayList that holds all the names of those people who heard (‘listeners’) a rumour with no repeated names.
+The method heardOnly returns an ArrayList that contains those people who heard a rumour but never spread it (i.e., never told the rumour afterwards). The method takes in a LinkedList.
+The method trace takes in a LinkedList and a name. Using the name as a starting point, this method traces who spread/heard the rumour from the starting name (passed in) to the final person who heard the rumour. It returns an ArrayList that contains these names.
+
+There are a couple of assumptions that you can make.
+When you add a Node to the LinkedList you should use the method addToEnd.
+A person who spreads a rumour will only tell ONE person the same rumour (i.e., a person will only tell at least one more person the same rumour).
