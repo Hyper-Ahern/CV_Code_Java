@@ -1,0 +1,90 @@
+/**
+ * @author James Ahern - B00437921
+ * @description This program takes in racing data from the scanner about 2 racers and sees who
+ * will finish the race first. It then prints out all the moves that are made and
+ * the winner with how many rounds it took.
+ */
+
+import java.util.*;
+
+public class RacerDemo
+{
+  public static void main(String[] args)
+  {
+    // Declaring and initializing variables and objects
+    Scanner in = new Scanner(System.in);  
+    Racer r1 = new Racer(in.next(), in.nextInt(), in.nextInt());
+    Racer r2 = new Racer(in.next(), in.nextInt(), in.nextInt());
+    String outputString = "";
+    int counter=0;
+    int winner = 0;
+    boolean gameOver = false;
+    boolean gameOver2 = false;
+    boolean stopLoop = false;
+    
+    // Getting the first initial of the racers for later output
+    String r1Initial = r1.getName();
+    r1Initial = r1Initial.substring(0,1);
+    String r2Initial = r2.getName();
+    r2Initial = r2Initial.substring(0,1);
+    
+    // Used for movement of the racers, concatenating the output string, and
+    // finding out who won or if it was a tie
+    while(in.hasNextInt() && stopLoop == false)
+    {
+      counter++;
+      int temp = in.nextInt();
+      int temp2 = in.nextInt();
+      int temp3 = in.nextInt();
+      int temp4 = in.nextInt();
+      
+      // Making moves and checking if any player has won yet + concatenating
+      outputString += r1Initial + ": " + temp + " " + temp2 + " ";
+      r1.move(temp, temp2);
+      gameOver = (r1.win());
+      outputString += r2Initial + ": " + temp3 + " " + temp4 + " ";
+      r2.move(temp3, temp4);
+      gameOver2 = (r2.win());
+      
+      // Checking for the winner tie=3, racers = their respective numbers (1 or 2)
+      if (gameOver == true && gameOver2 == true)
+      {
+          winner = 3;
+          stopLoop = true;
+      }    
+      else if (gameOver == true)
+      {
+        winner = 1;
+        stopLoop = true;
+      }
+      else if (gameOver2 == true)
+      {
+        winner = 2;
+        stopLoop = true;
+      }
+      else
+      {
+        
+      }
+    }    
+    System.out.println(outputString);
+    
+    // Printing out the winner or a tie accordingly
+    if (winner == 1)
+    {
+      System.out.println(r1.getName() + " wins in " + counter + " rounds!");
+    }
+    else if (winner == 2)
+    {
+      System.out.println(r2.getName() + " wins in " + counter + " rounds!");
+    }
+    else if (winner == 3)
+    {
+      System.out.println("Tie! in " + counter + " rounds!");
+    }
+    else
+    {
+      
+    }    
+  }
+}
