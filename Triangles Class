@@ -1,0 +1,253 @@
+/**
+ * @author James A'Hern - B00437921
+ * Oct 25, 2018
+ * @description This class creates and manipulates Triangle2D objects including checking to see
+ * if triangles fit into one another, contain a particular point, or overlap
+ * one another.
+ */
+
+public class Triangle2D
+{
+  private Point p1;
+  private Point p2;
+  private Point p3;
+  
+  // Blank Constructor
+  public Triangle2D()
+  {
+    
+  }
+  
+  // Fuly Parameterized Constructor
+  public Triangle2D(Point point1, Point point2, Point point3)
+  {
+    p1 = point1;
+    p2 = point2;
+    p3 = point3;
+  }
+  
+  // Get Methods
+  public Point getPoint1()
+  {
+    return p1;
+  }
+  
+  public Point getPoint2()
+  {
+    return p2;
+  }
+  
+  public Point getPoint3()
+  {
+    return p3;
+  }
+  
+  // Set Methods
+  public void setPoint1(Point p)
+  {
+    p1 = p;
+  }
+  
+  public void setPoint2(Point p)
+  {
+    p2 = p;
+  }
+  
+  public void setPoint3(Point p)
+  {
+    p3 = p;
+  }
+  
+  /* METHOD getArea
+   * This Method does the following:
+   * 1. Calculates the area of a triangle
+   * 
+   * @param NONE
+   * return double
+   */
+  public double getArea()
+  {
+    // Formula directly from the assignment instructions
+    double area = (0.5 * (((p2.getXPos() - p1.getXPos()) * (p3.getYPos() - p1.getYPos())) - ((p3.getXPos() - p1.getXPos()) * (p2.getYPos()-p1.getYPos()))));
+    return area;
+  }
+  
+  /* METHOD getPerimeter
+   * This method does the following:
+   * 1. Finds the distance between each point3
+   * 2. Returns their sum as the perimeter of the triangle
+   * 
+   * @param NONE
+   * return double
+   */
+  public double getPerimeter()
+  {
+    // Basic formula for the distance of a line taken from my memory of math class
+    double line12 = Math.sqrt((this.p2.getXPos() - this.p1.getXPos()) * (this.p2.getXPos() - this.p1.getXPos()) + (this.p2.getYPos() - this.p1.getYPos()) * (this.p2.getYPos() - this.p1.getYPos())); 
+    double line23 = Math.sqrt((this.p2.getXPos() - this.p3.getXPos()) * (this.p2.getXPos() - this.p3.getXPos()) + (this.p2.getYPos() - this.p3.getYPos()) * (this.p2.getYPos() - this.p3.getYPos())); 
+    double line13 = Math.sqrt((this.p3.getXPos() - this.p1.getXPos()) * (this.p3.getXPos() - this.p1.getXPos()) + (this.p3.getYPos() - this.p1.getYPos()) * (this.p3.getYPos() - this.p1.getYPos())); 
+    return line12 + line23 + line13;
+  }
+  
+  /* METHOD contains
+   * This method does the following
+   * 1. Obtains all the x and y positions of the calling object and the given point
+   * 2. Calculates the area of the calling triangle object
+   * 3. Calculates the are of the point with two other points in the triangle
+   * 4. Checks if all the areas of step 3 equals the total area of the triangle
+   * 5. If it is, the point is in the triangle and it returns true - else, false
+   * 
+   * @param Point
+   * return boolean
+   */
+  public boolean contains(Point p)
+  {
+    // Calculating areas of triangle, and the given point to all other points
+    double area = this.getArea();
+    // Changed the formula from the instructions to reflect a given point
+    double area1 = (0.5 * (((this.p2.getXPos() - this.p1.getXPos()) * (p.getYPos() - this.p1.getYPos())) - ((p.getXPos() - this.p1.getXPos()) * (this.p2.getYPos() - this.p1.getYPos()))));
+    double area2 = (0.5 * (((this.p2.getXPos() - p.getXPos()) * (this.p3.getYPos() - p.getYPos())) - ((this.p3.getXPos() - p.getXPos()) * (this.p2.getYPos() - p.getYPos()))));
+    double area3 = (0.5 * (((p.getXPos() - this.p1.getXPos()) * (this.p3.getYPos() - this.p1.getYPos())) - ((this.p3.getXPos() - this.p1.getXPos()) * (p.getYPos() - this.p1.getYPos()))));
+
+    // Calculating length of lines from one another and from given point to the others    
+    double line12 = Math.sqrt((this.p2.getXPos() - this.p1.getXPos()) * (this.p2.getXPos() - this.p1.getXPos()) + (this.p2.getYPos() - this.p1.getYPos()) * (this.p2.getYPos() - this.p1.getYPos())); 
+    double line23 = Math.sqrt((this.p2.getXPos() - this.p3.getXPos()) * (this.p2.getXPos() - this.p3.getXPos()) + (this.p2.getYPos() - this.p3.getYPos()) * (this.p2.getYPos() - this.p3.getYPos())); 
+    double line13 = Math.sqrt((this.p3.getXPos() - this.p1.getXPos()) * (this.p3.getXPos() - this.p1.getXPos()) + (this.p3.getYPos() - this.p1.getYPos()) * (this.p3.getYPos() - this.p1.getYPos()));     
+    double line1P = Math.sqrt((this.p1.getXPos() - p.getXPos()) * (this.p1.getXPos() - p.getXPos()) + (this.p1.getYPos() - p.getYPos()) * (this.p1.getYPos() - p.getYPos()));
+    double line2P = Math.sqrt((this.p2.getXPos() - p.getXPos()) * (this.p2.getXPos() - p.getXPos()) + (this.p2.getYPos() - p.getYPos()) * (this.p2.getYPos() - p.getYPos()));
+    double line3P = Math.sqrt((this.p3.getXPos() - p.getXPos()) * (this.p3.getXPos() - p.getXPos()) + (this.p3.getYPos() - p.getYPos()) * (this.p3.getYPos() - p.getYPos()));
+    
+    // If distance of the whole line is the same as the distance of the given point 
+    // to both ends of the line, then the given point is ON the line: Return true
+    if(line12 == line1P + line2P || line23 == line2P + line3P || line13 == line1P + line3P)
+    {
+      return true;
+    }
+    else
+    {
+      
+    }
+    
+    // If any of the areas are negative, checking to see if they are all negative.
+    // If they are NOT all negative, return false because the point cannot be inside
+    // the triangle. If they are all negative, then proceed.
+    if((area1<0 || area2<0 || area3<0))
+    {
+      if(!( area1<0 && area2<0 && area3<0))
+      {
+        return false;
+      }
+      else
+      {
+     
+      }
+    }
+    else
+    {
+      
+    }
+    
+    // Finally, if none of the other checks return a value, check if the combined
+    // areas of the given point to each other point is the same as the area of the
+    // triangle. If so, return true.
+    if (area == (area1 + area2 + area3))
+    {
+      return true;
+    }
+    else 
+    {
+      return false;
+    }
+  }
+  
+  /* METHOD contains
+   * This method does the following
+   * 1. Obtains all the x and y positions of the calling object and the given point
+   * 2. Calculates the area of the calling triangle object
+   * 3. Calculates the are of the point with two other points in the triangle
+   * 4. Checks if all the areas of step 3 equals the total area of the triangle
+   * 5. If it is, the point is in the triangle and it returns true - else, false
+   * 
+   * @param Triangle2D 
+   * return boolean
+   */
+  public boolean contains(Triangle2D t)
+  {   
+    // If all the points of the given triangle are inside the calling triangle, then
+    // the given triangle has to be inside the calling triangle.
+    if(this.contains(t.p1)&& this.contains(t.p2)&& this.contains(t.p3))
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }   
+  }
+  
+  /* METHOD overlaps
+   * This method does the following
+   * 1. Checks if any othe points are the same: returns true if so
+   * 2. Checks if either triangle contains the other: Returns false if so
+   * 
+   * @param Triangle2D t
+   * return boolean
+   */
+  public boolean overlaps(Triangle2D t)
+  {
+    // Are any of the points in either triangle the same: if so return true
+    if(this.p1.getXPos() == t.p1.getXPos() && this.p1.getYPos() == t.p1.getYPos())
+    {
+      return true;
+    }
+    else if (this.p2.getXPos() == t.p2.getXPos() && this.p2.getYPos() == t.p2.getYPos())
+    {
+      return true;
+    }
+    else if (this.p3.getXPos() == t.p3.getXPos() && this.p3.getYPos() == t.p3.getYPos())
+    {
+      return true;
+    }
+    else if (this.p1.getXPos() == t.p2.getXPos() && this.p1.getYPos() == t.p2.getYPos())
+    {
+      return true;
+    }
+    else if (this.p1.getXPos() == t.p3.getXPos() && this.p1.getYPos() == t.p3.getYPos())
+    {
+      return true;
+    }
+    else if (this.p2.getXPos() == t.p3.getXPos() && this.p2.getYPos() == t.p3.getYPos())
+    {
+      return true;
+    }
+    else
+    {
+      // If either triangle is contained within the other, they cannot overlap
+      if(this.contains(t) || t.contains(this))
+      {
+        return false;
+      }
+      /* Since all other conditions have been tested, it must overlap.(All conditions
+      that are relevant to this assignment not including a point on the line 
+      itself or two points outside the line overlaping a remote part of the other 
+      triangle. If this was asked I would have added more parameters to ensure 
+      any kind of overlap was tested for)*/
+      else
+      {
+        return true;
+      }
+    }   
+  }
+  
+  /* METHOD toString
+  * This method does the following:
+  * 1. Returns a string containing x and y position of a point.
+  * 
+  * @param NONE
+  * @return String
+  */
+  public String toString()
+  {
+    return "Triangle: " + p1.toString() + " " + p2.toString() + " " + p3.toString();
+  }  
+}
