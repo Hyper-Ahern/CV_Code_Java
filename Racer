@@ -1,0 +1,118 @@
+/**
+ * @author James Ahern - B00437921 
+ * @description This class creates Racer objects that can move forward or backwards depending
+ * on their characters. It is extended from the Player class and gets name,
+ * position, and maxPosition as superclass attributes.
+ */
+
+import java.util.*;
+
+public class Racer extends Player
+{
+  private int steps;
+  private int direction;
+  private int character;
+  
+  // Constructor
+  public Racer(String n, int ch, int m)
+  {
+    super(n,m);
+    setName(n);
+    setMaxPosition(m);
+    
+    // Setting steps and direction parameters based on a racer's character
+    character=ch;
+    if (ch==1)
+    {
+      steps=2;
+      direction=1;
+    }
+    else
+    {
+      steps=4;
+      direction=0;
+    }   
+  }
+  
+  // Get Methods
+  public int getSteps()
+  {
+    return this.steps;
+  }
+  
+  public int getDirection()
+  {
+    return this.direction;
+  }
+  
+  public int getCharacter()
+  {
+    return this.character;
+  }
+  
+  // Set Methods
+  public void setSteps(int s)
+  {
+    this.steps=s;
+  }
+  
+  public void setDirection(int d)
+  {
+    this.direction=d;
+  }
+  
+  public void setCharacter(int c)
+  {
+    this.character=c;
+  }
+  
+  /*METHOD move
+   * This method does the following:
+   * 1. Sets the number of places and direction to move based on character parameters
+   * 
+   * @param int n (number of steps)
+   * @param int d (direction of movement)
+   * return NONE
+   */
+   public void move(int d, int n)
+   {
+     int p = 0;
+     if (d==0 && this.character == 1)
+     {
+       if(n>2)
+       {
+         p = this.steps;
+       }
+       else
+       {
+         p = n;
+       }
+     }
+     else if (d== 0 && this.character == 2)
+     {
+       p = (n * (-1));
+     }
+     else if (d==1 && this.character == 1)
+     {
+       if(n>2)
+       {
+         p = this.steps;
+       }
+       else
+       {
+         p = n;
+       }
+     }
+     else if (d==1 && this.character == 2)
+     {
+       p = n;
+     }
+     else
+     {
+     
+     }
+     
+     // Calling parent method with the same name through super command
+     super.move(p);
+   } 
+}
