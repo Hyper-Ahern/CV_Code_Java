@@ -1,5 +1,5 @@
 /**
- * @author James A'Hern - B00437921
+ * @author James Ahern - B00437921
  * @description This class creates and manipulates Triangle2D objects including checking to see
  * if triangles fit into one another, contain a particular point, or overlap
  * one another.
