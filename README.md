@@ -1,2 +1,2 @@
 # CV-Code
-Code that I will be presenting to potential employers
+These are some examples of code that I have written for various purposes.
