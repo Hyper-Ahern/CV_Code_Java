@@ -1,0 +1,434 @@
+/**
+ * @author James Ahern - B00437921
+ * @description This is the LinkedList class we created in class and have used 
+ * throughout. I took this class from the lecture slides we had in 
+ * class and the previous problems of the day. I then modified it to
+ * suit my needs for this program. All credit for creating this goes to
+ * the class and Bonnie. This is why there are so few comments because we
+ * have talked about and commented this to death in the classroom. This 
+ * class creates LinkedList objects from Nodes which are used to 
+ * make linked lists.
+ */
+
+public class LinkedList
+{
+  // Declaring and initializing variables and objects
+  private Node front;
+  private int count; 
+  
+  // Empty Constructor
+  public LinkedList()
+  {  
+   front = null;
+   count = 0;
+  }
+  
+  /* METHOD addToFront
+   * This method does the following:
+   * 1. Adds a Node object to the front of the list 
+   * 
+   * @param String  (Teller)
+   * @param String  (Listener)
+   * return NONE
+   */
+  public void addToFront(String t, String l)
+  {
+    Node n = new Node (t, l, front);
+    front = n;
+    count++;
+  }
+  
+  /* METHOD size
+   * This method does the following:
+   * 1. Returns the size of the LinkedList
+   * 
+   * @param NONE
+   * return int (size of the LinkedList)
+   */
+  public int size ()
+  {
+    return count;
+  }
+  
+  /* METHOD IsEmpty
+   * This method does the following:
+   * 1. Checks to see if the LinkedList is empty
+   * 
+   * @param NONE
+   * return boolean (True if the LinkedList is empty)
+   */
+  public boolean isEmpty() 
+  {
+    if (front == null)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    } 
+  }
+  
+  /* METHOD size
+   * This method does the following:
+   * 1. Clears the whole LinkedList
+   * 
+   * @param NONE
+   * return NONE
+   */
+  public void clear () 
+  {
+    front = null;
+    count = 0;
+  }
+  
+  /* METHOD getFrontTeller
+   * This method does the following:
+   * 1. Returns the teller data of the node
+   * 
+   * @param NONE
+   * return String (Name of the teller in that node)
+   */
+  public String getFrontTeller() 
+  {
+    return front.getTeller();
+  }
+  
+  /* METHOD getFrontListener
+   * This method does the following:
+   * 1. Returns the listener data of the node
+   * 
+   * @param NONE
+   * return String (Name of the listener in that node)
+   */
+  public String getFrontListener() 
+  {
+    return front.getListener();
+  }
+  
+  /* METHOD getFrontNode
+   * This method does the following:
+   * 1. Returns the front Node of the LinkedList that calls it
+   * 
+   * @param NONE
+   * return Node (The whole Node)
+   */
+  public Node getFrontNode() 
+  {
+    return front;
+  }
+  
+  /* METHOD enumerate
+   * This method does the following:
+   * 1. prints out each item in the linked list
+   * 
+   * @param NONE 
+   * return NONE
+   */
+  public void enumerate () 
+  { 
+    Node curr = front;
+    if (!isEmpty()) 
+    {
+      while (curr != null) 
+      {
+        System.out.print(curr);
+        curr = curr.getNext();
+      }
+      System.out.println();
+    }
+    else
+    {
+      
+    }
+  }
+  
+  /* METHOD removeFront
+   * This method does the following:
+   * 1. Removes the front Node in the LinkedList without losing the rest
+   * 
+   * @param NONE
+   * return NONE
+   */
+  public void removeFront() 
+  {
+    if (!isEmpty()) 
+    {
+      front = front.getNext();
+      count--;
+    }
+    else
+    {
+      
+    }
+  }
+   
+  /* METHOD addToEnd
+   * This method does the following:
+   * 1. Adds a node to the end of the LinkedList
+   * 
+   * @param String (Teller for new Node)
+   * @param String (Listener for new Node)
+   * return NONE
+   */
+  // Method 9 - add node with string d to the end of the list
+  public void addToEnd(String t, String l)
+  {
+    Node n = new Node (t, l, null);
+    if (isEmpty())
+    {
+      front = n;
+    }
+    else
+    {
+      Node curr = front;
+      while (curr.getNext() != null)
+      {
+        curr = curr.getNext();
+      }  
+      curr.setNext(n);
+    }
+    count++;
+  }
+    
+  /* METHOD removeLast
+   * This method does the following:
+   * 1. Removes the last Node in the LinkedList
+   * 
+   * @param NONE
+   * return NONE
+   */
+  public void removeLast()
+  {
+    if (isEmpty())
+    {
+      
+    }
+    
+    // If there is only one node it is a special case
+    else if (front.getNext() == null)
+    {
+      front = null;
+      count--;
+    }
+    else 
+    {
+      Node curr = front;
+      while (curr.getNext().getNext() != null)
+      {
+        curr = curr.getNext();
+        curr.setNext(null);
+        count--;
+      }
+    }
+  }
+    
+  /* METHOD containsTellerOld
+   * This method does the following:
+   * 1. Searches for whether the teller is in the LinkedList
+   * 2. Returns the index where the teller is
+   * 
+   * @param String (Teller to search for)
+   * return int (index at which the teller searched for resides)
+   */
+  public int containsTellerOld (String t)
+  {
+    Node curr = front;
+    boolean found = false;
+    int index = -1; 
+    
+    // Start at front which doesn't count
+    while (curr!=null && !found) 
+    {
+      index++;
+      if (curr.getTeller().equals(t))
+      {
+        found = true;
+      }
+      curr = curr.getNext();
+    }
+    if (!found)
+    {
+      index = -1;
+    }
+    return index;
+  }
+  
+  /* METHOD containsListenerOld
+   * This method does the following:
+   * 1. Searches for whether the listener is in the LinkedList
+   * 2. Returns the index where the listener is
+   * 
+   * @param String (Listener to search for)
+   * return int (index at which the listener searched for resides)
+   */  
+  public int containsListenerOld (String l)
+  {
+    Node curr = front;
+    boolean found = false;
+    int index=-1; 
+    
+    // Start at front which doesn't count
+    while (curr != null && !found) 
+    {
+      index++;
+      if (curr.getListener().equals(l))
+      {
+        found = true;
+      }
+      curr = curr.getNext();
+    }
+    if (!found)
+    {
+      index = -1;
+    }
+    return index;
+  }
+    
+  /* METHOD add
+   * This method does the following:
+   * 1. Adds a newly created Node to the index given
+   * 2. Returns the index where the teller is
+   * 
+   * @param int (the index where the Node needs to be added)
+   * @param String (Teller)
+   * @param String (Listener)
+   * return NONE
+   */
+  public void add (int index, String t, String l) 
+  {
+    if (index < 0 || index > size()) 
+    {
+      // Check the boundaries
+      System.out.println("Cannot add Node - index is out of bounds");
+    }
+    else 
+    {
+      if (index == 0)
+      {
+        addToFront(t, l);
+      }
+      else 
+      {
+        Node curr = front;
+        for (int i = 0; i < index-1; i++)
+        {
+          curr = curr.getNext();
+        }
+        Node n = new Node (t, l, curr.getNext());
+        curr.setNext(n);
+        count++;
+      }
+    }
+  }
+  
+  /* METHOD remove
+   * This method does the following:
+   * 1. Removes a Node from the LinkedList at a specific index
+   * 
+   * @param int (the index where the Node needs to be removed)
+   * return NONE
+   */  
+  public void remove (int index) 
+  {
+    if (index < 0 || index >= size())
+    {
+      System.out.println("Cannot remove Node - index is out of bounds");
+    }
+    else if (index == 0)
+    {
+      removeFront();
+    }
+    else if (index == size()-1)
+    {
+      removeLast();
+    }
+    else 
+    {
+      Node curr = front;
+      for (int i = 0; i < index-1; i++)
+      {
+        curr = curr.getNext();
+      }
+      curr.setNext(curr.getNext().getNext());
+      count--;
+    }
+  }
+    
+  /* METHOD getNode
+   * This method does the following:
+   * 1. Returns a specific Node at the given index
+   * 
+   * @param int (the index where the Node is located)
+   * return Node  (The requested Node)
+   */
+  public Node getNode(int index) 
+  {
+    Node curr = null;
+    if (index < 0 || index >= size()) 
+    {
+      System.out.println("Cannot return Node -index is out of bounds");
+    }
+    else if (index == 0)
+    {
+      curr = front;
+    }
+    else 
+    {
+      curr = front;
+      for (int i = 0; i < index; i++)
+      {
+        curr = curr.getNext();
+      }
+    }
+    return curr;
+  }
+  
+  /* METHOD containsTeller
+   * This method does the following:
+   * 1. Checks if a given teller is in the LinkedList based on given name
+   * 
+   * @param String (Teller to look for)
+   * return boolean (true means the teller is in the LinkedList)
+   */
+  public boolean containsTeller (String t)
+  {
+    Node curr = front;
+    boolean found = false;
+    
+    // Start at front which doesn't count
+    while (curr != null && !found) 
+    {
+      if (curr.getTeller().equals(t))
+      {
+        found=true;
+      }
+      curr=curr.getNext();
+    }
+    return found;
+  }
+  
+  /* METHOD containsListener
+   * This method does the following:
+   * 1. Checks if a given listener is in the LinkedList based on given name
+   * 
+   * @param String (listener to look for)
+   * return boolean (true means the listener is in the LinkedList)
+   */
+  public boolean containsListener (String l)
+  {
+    Node curr = front;
+    boolean found = false;
+    
+    // start at front which doesn't count
+    while (curr != null && !found) 
+    {
+      if (curr.getListener().equals(l))
+      {
+        found = true;
+      }
+      curr = curr.getNext();
+    }
+    return found;
+  }    
+}                       
