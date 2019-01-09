@@ -1,0 +1,106 @@
+/**
+ * @author James Ahern - B00437921 
+ * @description This class creates Player objects and has move and win methods to move a player's
+ * position or find out who has won the race.
+ */
+
+import java.util.*;
+
+public class Player
+{
+  private String name;
+  private int position=1;
+  private int maxPosition;
+  
+  //Constructor
+  public Player(String n, int m)
+  {
+    this.name=n;
+    this.maxPosition=m;
+    this.position=1;
+  }
+  
+  // Get Methods
+  public String getName()
+  {
+    return this.name;
+  }
+  
+  public int getPosition()
+  {
+    return this.position;
+  }
+  
+  public int getMaxPosition()
+  {
+    return this.maxPosition;
+  }
+  
+  // Set Methods 
+  public void setName(String n)
+  {
+    name=n;
+  }
+  
+  public void setPosition(int p)
+  {
+    position = p;
+  }
+  
+  public void setMaxPosition(int m)
+  {
+    maxPosition = m;
+  }
+  
+  /* METHOD move
+   * This method does the following:
+   * 1. Moves the player to the postion making sure they are within bounds
+   * 2. If less than 1 set to 1, if more than maxPosition do nothing
+   * 
+   * @param int p (number of places to potentially move based on conditions)
+   * return NONE
+   */
+  public void move(int p)
+  {
+    // Cannot be lower than start position
+    if(p + this.position < 1)
+    {
+      this.position = 1;
+    }
+    
+    // Cannot be larger than the finish line so they will stay where they are
+    else if (p + this.position > maxPosition)
+    {
+      
+    }
+    
+    // Add to position
+    else if (p + this.position <= maxPosition)
+    {
+      this.position += p;
+    }
+    else
+    {
+      
+    }
+  }
+  
+  /* METHOD win
+   * This method does the following:
+   * 1. Checks to see if the player is at maxPosition and has won the race
+   * 
+   * @param NONE
+   * return boolean 
+   */
+  public boolean win()
+  {
+    if(this.position == this.maxPosition)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  } 
+}
