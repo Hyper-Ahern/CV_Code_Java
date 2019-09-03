@@ -1,0 +1,407 @@
+/**
+ * File Name: RouteCost.java
+ * Author: James A'Hern
+ * Date April 8th, 2019
+ *
+ * This program uses a graph containing edges and vertices to first take in
+ * input for board routes to the game "Ticket to Ride" and creates the board.
+ * Then it calculates the shortest distance to go from one city to another
+ * several times over until all desired routes are traveled. Finally it prints
+ * out the routes that are the quickest and the total cost of the path
+ * travelled.
+ */
+
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Scanner;
+
+public class RouteCost {
+
+  public static void main (String [] args) {
+
+    // Declaring and intiializing variables/scanner/lists
+    Scanner in = new Scanner(System.in);
+    Graph graph = new Graph();
+    ArrayList<String> routes = new ArrayList<String>();
+    String temp = in.next();
+    String name2 = "";
+    int total = 0;
+
+    // Taking input for board creation and building the board
+    while (!temp.equals("done")) {
+      String name1 = temp;
+      int weight = in.nextInt();
+      name2 = in.next();
+      graph.addVertex(name1);
+      graph.addVertex(name2);
+      graph.buildEdge(name1, name2, weight);
+      temp = in.next();
+    }
+
+    // Taking input for desired paths to travel and storing them in an list
+    temp = in.next();
+    while (!temp.equals("done")) {
+      routes.add(temp);
+      temp = in.next();
+    }
+
+    // Printing the final results ( distance )
+    System.out.println("The rail network consists of: ");
+    for (int i = 0; i < routes.size(); i += 2) {
+      graph.shortestPath(routes.get(i));
+      total += graph.finalDistance(routes.get(i), routes.get(i + 1));
+      graph.reset();
+    }
+
+    /* Making sure there are no duplicates by adding the list to a hashset
+    then back again which force removes all duplicates. Then sorts them */
+    ArrayList<Edge> theFinalList = graph.finalList;
+    LinkedHashSet<Edge> tempHash = new LinkedHashSet<Edge>();
+    tempHash.addAll(theFinalList);
+    theFinalList.clear();
+    theFinalList.addAll(tempHash);
+    Collections.sort(theFinalList);
+
+    // Printing out the final results ( shortest paths to take )
+    for (Edge e : theFinalList) {
+      e.printEdge();
+      System.out.println();
+    }
+
+    System.out.println("The total cost is: " + total);
+  }
+
+  /* This class creates a graph which holds all the relevant data to solve the
+   * problem. It stores a hashmap of cities and their corresponding info, a
+   * list for all edges (routes) between cities, and it stores a final list
+   * which is returned at the end. It also contains the algorithm used and all
+   * methods needed to find the shortest paths.
+   */
+  public static class Graph {
+
+    // Declaring and initializing  lists and maps.
+    HashMap<String, Vertex> map = new HashMap<String, Vertex>();
+    ArrayList<Edge> edgeList = new ArrayList<>();
+    ArrayList<Edge> finalList = new ArrayList<>();
+
+    //Constructor
+    Graph(){
+
+    }
+
+    // Checks if a vertex exists, if  not, add it to the graph
+    void addVertex(String name) {
+      if(!map.keySet().contains(name)){
+        Vertex v1 = new Vertex(name);
+        map.put(name, v1);
+      }
+    }
+
+    //Builds an edge between 2 given cities and their weight
+    void buildEdge(String vertexName, String adj, int weight) {
+      Vertex v1 = map.get(vertexName);
+      Vertex v2 = map.get(adj);
+      Edge edge = new Edge(v1,v2,weight);
+      this.edgeList.add(edge);
+      v1.addVertexAdj(v2);
+      v2.addVertexAdj(v1);
+      v1.setEdge(edge);
+      v2.setEdge(edge);
+    }
+
+    // Gets the weight (distance) between 2 cities by name
+    int getWeight(String n1, String n2){
+      for(Edge curr : edgeList){
+        if((curr.getVertex1().getName().equals(n1)&&curr.getVertex2().getName()
+            .equals(n2)) || (curr.getVertex1().getName().equals(n2)&&curr.
+            getVertex2().getName().equals(n1))){
+          return curr.getWeight();
+        }
+      }
+
+      return 0;
+    }
+
+    /* Resets all the visited nodes, resets the distance to infinity
+     * and clears the shortest path. This is because the algorithm iterates
+     * through all possibilities and then we choose the right one at the end.
+     */
+    public void reset() {
+      Vertex[] vertices = getAllVertex();
+      for (int i = 0; i < vertices.length; i++){
+        vertices[i].setDistance(Integer.MAX_VALUE);
+        vertices[i].resetVisited();
+        vertices[i].clearSP();
+      }
+    }
+
+    /* This is the major method of this program and includes the algorithm. It
+     * is a depth first search (considered Dijkstra's but found this better)
+     */
+    public void shortestPath(String from) {
+
+      // Getting the right index for the city we are starting from
+      Vertex[] vertices = getAllVertex();
+      int theRightIndex = 0;
+      for (int i = 0; i < vertices.length; i++) {
+        if (vertices[i].getName().equals(from)) {
+          theRightIndex = i;
+        }
+      }
+
+      /* Setting the source distance form infinity to 0 since the distance from
+       * a city to itself is 0.
+      */
+      vertices[theRightIndex].setDistance(0);
+      int nextVertex = theRightIndex;
+
+      // Cycling through all the vertices in a depth first search
+      for (int i = 0; i < vertices.length; i++) {
+        ArrayList<Edge> currentVertexEdges = vertices[nextVertex].getEdges();
+        String currVertex = vertices[nextVertex].getName();
+
+        // Getting that vertex's neighbor
+        for (int j = 0; j < currentVertexEdges.size(); j++) {
+          Vertex neighbor = currentVertexEdges.get(j).getNeighbor(currVertex);
+
+          // If neighbor isn't visited, get it's distance.
+          if (!neighbor.isVisited()) {
+            int temp = vertices[nextVertex].getDistance() +
+                currentVertexEdges.get(j).getWeight();
+            if (temp < neighbor.getDistance()) {
+
+              // Updating distance of neighbor
+              neighbor.setDistance(temp);
+
+              // Updating the actual path/edges (the shortest ones)
+              neighbor.clearSP();
+              neighbor.setShortestPath(vertices[nextVertex].getShortestPath());
+              neighbor.setShortestPath(currentVertexEdges.get(j));
+            }
+          }
+        }
+
+        // Checking the next node based on the closest one to the current node
+        vertices[nextVertex].setVisited();
+        nextVertex = getVertexShortestPath();
+      }
+    }
+
+    /* This method finds the shortest path from the vertex we are currently
+     * looking at and the ones that are attached to it. When it finds the
+     * nearest city, it returns that city to be looked at next.
+     */
+    public int getVertexShortestPath() {
+      Vertex[] vertices = getAllVertex();
+      int vertexIndex = 0;
+      int oldDistance = Integer.MAX_VALUE;
+      for (int i = 0; i < vertices.length; i++) {
+        int currDistance = vertices[i].getDistance();
+        if (!vertices[i].isVisited() && currDistance < oldDistance) {
+          oldDistance = currDistance;
+          vertexIndex = i;
+        }
+      }
+
+      return vertexIndex;
+    }
+
+    /* This method takes a "from" city and a "to" city then adds to a final
+     * list and returns the distance from the "to" city from the "from" city
+     */
+    public int finalDistance(String from, String to) {
+
+      // Declaring and initializing arrays of vertices and a list of edges
+      Vertex[] vertices = getAllVertex();
+      Vertex[] vertices2 = getAllVertex();
+      ArrayList<Edge> edgeList = new ArrayList<>();
+      int theToIndex = 0;
+
+      // Searches for the right city and gets the index of it
+      for (int i = 0; i < vertices.length; i++){
+        if (vertices[i].getName().equals(to)){
+          theToIndex = i;
+        }
+      }
+
+      // Get the shortest paths of the city we are examining
+      for (int k = 0; k < vertices[theToIndex].getShortestPath().size(); k++) {
+        edgeList.add(vertices[theToIndex].getShortestPath().get(k));
+      }
+
+      // iterate through the shortest paths and adds them to the final list
+      for (Edge e : edgeList) {
+        e.swap();
+        finalList.add(e);
+      }
+
+      Collections.sort(edgeList);
+
+      return vertices2[theToIndex].getDistance();
+    }
+
+    // Getters
+    public Vertex[] getAllVertex(){
+      int mapSize = map.keySet().size();
+      Vertex vertexArray[] = new Vertex[mapSize];
+      int i = 0;
+      for (Vertex key : map.values()) {
+        vertexArray[i] = key;
+        i++;
+      }
+
+      return vertexArray;
+    }
+  }
+
+  /* This class creates vertices which represent cities. They have their names,
+   * their neighboring cities, a visited status, and a distance from another
+   * city which changes based on the city we are examining at any given time
+   */
+  public static class Vertex {
+
+    // Declaring and initializing variables/lists
+    String name;
+    ArrayList<Vertex> adj = new ArrayList<Vertex>();
+    ArrayList<Edge> edges = new ArrayList<Edge>();
+    ArrayList<Edge> shortestPath = new ArrayList<Edge>();
+    boolean visited;
+    int sourceDistance = Integer.MAX_VALUE;
+
+    //Constructor
+    public Vertex(String name) {
+      this.name = name;
+    }
+
+    // Adds an adjacency to this vertex as long as it isn't already there
+    public void addVertexAdj(Vertex v1) {
+      if (!adj.contains(v1)) {
+        this.adj.add(v1);
+      }
+    }
+
+    // Getters
+    public String getName() {
+      return this.name;
+    }
+
+    public int getDistance() {
+      return this.sourceDistance;
+    }
+
+    public boolean isVisited() {
+      return this.visited;
+    }
+
+    public ArrayList<Edge> getEdges() {
+      return this.edges;
+    }
+
+    public ArrayList<Edge> getShortestPath() {
+      return this.shortestPath;
+    }
+
+    //Setters and Resets
+    public void setDistance(int distance) {
+      this.sourceDistance = distance;
+    }
+
+    public void clearSP() {
+      this.shortestPath.clear();
+    }
+
+    public void setShortestPath(ArrayList<Edge> list) {
+      this.shortestPath = (ArrayList<Edge>)list.clone();
+    }
+
+    public void setShortestPath(Edge e) {
+      this.shortestPath.add(e);
+    }
+    public void setVisited() {
+      this.visited = true;
+    }
+
+    public void resetVisited() {
+      this.visited = false;
+    }
+
+    public void setEdge(Edge e) {
+      this.edges.add(e);
+    }
+  }
+
+  /* This class creates edges which are a path from one city to another and the
+   * weight (or distance) that it takes to get there.
+   */
+  public static class Edge implements Comparable<Edge> {
+
+    // Declaring and initializing variables
+    Vertex vertex1 ;
+    Vertex vertex2;
+    int weight;
+
+    // Constructor
+    public Edge(Vertex v1, Vertex v2,int distance) {
+      this.vertex1 = v1; //from index
+      this.vertex2 = v2; //to index
+      this.weight = distance;
+    }
+
+    //Getters
+    public Vertex getVertex1() {
+      return vertex1;
+    }
+
+    public Vertex getVertex2() {
+      return vertex2;
+    }
+
+    public int getWeight() {
+      return weight;
+    }
+
+    // Gets the neighbor vertex (or city)
+    public Vertex getNeighbor(String str) {
+      String v1Name = vertex1.getName();
+      if (str.equals(v1Name)) {
+        return vertex2;
+      } else {
+        return vertex1;
+      }
+    }
+
+    // Swaps one city to the other side of the edge for ordering purposes later
+    public void swap() {
+      String name1 = this.vertex1.getName();
+      String name2 = this.vertex2.getName();
+      if (name1.compareTo(name2) > 0) {
+        Vertex temp = vertex2;
+        vertex2 = vertex1;
+        vertex1 = temp;
+      }
+    }
+
+    // Prints out the edge in the proper format
+    public void printEdge() {
+      System.out.print("  " + this.vertex1.getName() + " " + this.getWeight()
+          + " " + this.getVertex2().getName());
+    }
+
+    /* Added a compare interface to be able to compare edge objects for the
+     * sake of sorting. This compares them to each other's city names
+     */
+    @Override
+    public int compareTo(Edge e) {
+      String name = e.getVertex1().getName();
+      int compare = this.getVertex1().getName().compareTo(name);
+      if (compare == 0 ) {
+        String name2 = e.getVertex2().getName();
+        compare = this.getVertex2().getName().compareTo(name2);
+      }
+
+      return compare;
+    }
+  }
+}
