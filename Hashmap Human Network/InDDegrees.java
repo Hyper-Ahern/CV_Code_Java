@@ -8,12 +8,10 @@ import java.util.Scanner;
  * uses a graph to track their connections by degrees of relations. If bob knows
  * steve and steve knows alice, then bob is connected to alice by 2 degrees. It
  * uses a hashmap to keep track of string names and person objects for values
- * author: Hyper A'Hern
+ * author: James A'Hern
  * Date: April 25, 2019
  *
- * Citations: I used professor brodsky's tutorial algorithm to get the degrees
- *            right. I also talked about the problem with fellow classmates but
- *            no code was exchanged, only ideas.
+ * Citations: I used Alex Brodsky's base algorithm to get the degrees right.
  */
 public class InDDegrees {
 
