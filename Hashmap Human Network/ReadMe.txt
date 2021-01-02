@@ -13,7 +13,7 @@ done
 2 Carol
 done
 
-The output will be the group of acquaintances within the specifed degree:
+The output will be the group of social acquaintances within the specifed degree:
 
 Carol is within 2 degrees of separation from:
 Bob
